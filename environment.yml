@@ -1,0 +1,32 @@
+name: ecg-classification
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  # Data
+  - numpy
+  - pandas
+  - scipy
+  # ML
+  - scikit-learn
+  - imbalanced-learn
+  # Deep learning
+  - pytorch
+  - torchvision
+  - torchaudio
+  - cpuonly  # remove and add pytorch-cuda=12.1 if using GPU
+  # Visualization
+  - matplotlib
+  - seaborn
+  # Notebooks
+  - jupyterlab
+  - ipywidgets
+  # Storage
+  - h5py
+  # Utilities
+  - tqdm
+  - pip:
+    - wfdb

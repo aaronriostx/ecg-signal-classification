@@ -12,6 +12,7 @@ Writes: build/cnn_1d/
 
 import os
 import json
+import time
 import numpy as np
 import h5py
 import torch
@@ -252,6 +253,7 @@ def main():
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
     best_val_loss = float("inf")
     epochs_no_improve = 0
+    t_start = time.time()
 
     for epoch in range(1, EPOCHS + 1):
         tr_loss, tr_acc = train_epoch(model, train_loader, criterion, optimizer, device)
@@ -277,6 +279,8 @@ def main():
                 print(f"\nEarly stopping at epoch {epoch}.")
                 break
 
+    training_time = time.time() - t_start
+
     # Load best weights for evaluation
     model.load_state_dict(torch.load(os.path.join(OUT_DIR, "model.pt"), map_location=device))
 
@@ -300,6 +304,7 @@ def main():
             "early_stopping_patience": PATIENCE,
         },
         "training_epochs": len(history["train_loss"]),
+        "training_time_seconds": round(training_time, 1),
         "best_val_loss": best_val_loss,
         "classification_report": report,
     }

@@ -98,6 +98,14 @@ def main():
         n = (labels == cls).sum()
         print(f"  {name:<15} {n:>7,}  ({100*n/len(labels):.1f}%)")
 
+    # Per-signal min-max normalization → [0, 1]
+    # Handles flat signals (min == max) by leaving them as zeros
+    s_min = signals.min(axis=1, keepdims=True)
+    s_max = signals.max(axis=1, keepdims=True)
+    denom = np.where(s_max - s_min == 0, 1, s_max - s_min)
+    signals = ((signals - s_min) / denom).astype(np.float32)
+    print(f"\nNormalized:   min={signals.min():.4f}  max={signals.max():.4f}")
+
     # Shuffle before saving
     rng = np.random.default_rng(42)
     idx = rng.permutation(len(signals))

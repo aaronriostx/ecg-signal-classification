@@ -13,6 +13,7 @@ Writes: build/xgboost/
 
 import os
 import json
+import time
 import numpy as np
 import h5py
 import xgboost as xgb  # pip: xgboost
@@ -184,12 +185,14 @@ def main():
     model = xgb.XGBClassifier(**PARAMS)
 
     print("Training XGBoost...")
+    t_start = time.time()
     model.fit(
         X_train, y_train,
         sample_weight=sample_weights,
         eval_set=[(X_train, y_train), (X_val, y_val)],
         verbose=10,
     )
+    training_time = time.time() - t_start
     evals_result = model.evals_result()
 
     model.save_model(os.path.join(OUT_DIR, "model.json"))
@@ -205,6 +208,7 @@ def main():
     metrics = {
         "hyperparameters": PARAMS,
         "best_iteration": int(model.best_iteration),
+        "training_time_seconds": round(training_time, 1),
         "classification_report": report,
     }
     with open(os.path.join(OUT_DIR, "metrics.json"), "w") as f:

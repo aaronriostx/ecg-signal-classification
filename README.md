@@ -16,17 +16,32 @@ ecg-signal-classification/
 │   ├── val.h5           # 10% validation split (13,253 records)
 │   ├── test.h5          # 15% test split (19,879 records)
 │   ├── ecg_signals.png  # Signal visualization
-│   └── cnn_1d/
-│       ├── model.pt             # Saved model weights
+│   ├── cnn_1d/
+│   │   ├── model.pt             # Saved model weights
+│   │   ├── metrics.json         # Classification report & hyperparameters
+│   │   ├── training_curves.png  # Loss & accuracy over epochs
+│   │   ├── confusion_matrix.png # Normalised confusion matrix
+│   │   └── roc_curves.png       # One-vs-rest ROC curves
+│   ├── resnet_1d/
+│   │   ├── model.pt             # Saved model weights
+│   │   ├── metrics.json         # Classification report & hyperparameters
+│   │   ├── training_curves.png  # Loss & accuracy over epochs
+│   │   ├── confusion_matrix.png # Normalised confusion matrix
+│   │   └── roc_curves.png       # One-vs-rest ROC curves
+│   └── xgboost/
+│       ├── model.json           # Saved XGBoost model
 │       ├── metrics.json         # Classification report & hyperparameters
-│       ├── training_curves.png  # Loss & accuracy over epochs
+│       ├── training_curves.png  # Log-loss per boosting round (train vs val)
 │       ├── confusion_matrix.png # Normalised confusion matrix
-│       └── roc_curves.png       # One-vs-rest ROC curves
+│       ├── roc_curves.png       # One-vs-rest ROC curves
+│       └── feature_importance.png # Top-30 features by gain
 ├── environment.yml
 ├── preprocess.py
 ├── plot_signals.py
 ├── split_data.py
-└── cnn_1d_train.py
+├── cnn_1d_train.py
+├── resnet_1d_train.py
+└── xgboost_train.py
 ```
 
 ## Setup
@@ -106,3 +121,44 @@ The script will automatically use CUDA, Apple MPS, or CPU depending on what is a
 | `roc_curves.png` | One-vs-rest ROC curves with AUC per class |
 
 Training uses class-weighted cross-entropy loss to account for the class imbalance, and stops early if validation loss does not improve for 10 consecutive epochs.
+
+### 5. Train 1D ResNet
+
+Trains a 1D ResNet classifier on the split data and evaluates it on the test set:
+
+```bash
+python resnet_1d_train.py
+```
+
+The ResNet uses residual skip connections across 4 layers (64 → 128 → 256 → 512 channels), making it deeper and more expressive than the 1D CNN. Outputs are saved to `build/resnet_1d/`:
+
+| File | Description |
+|---|---|
+| `model.pt` | Best model weights (saved at lowest validation loss) |
+| `metrics.json` | Classification report, hyperparameters, and training summary |
+| `training_curves.png` | Loss and accuracy per epoch for train and validation |
+| `confusion_matrix.png` | Normalised confusion matrix on the test set |
+| `roc_curves.png` | One-vs-rest ROC curves with AUC per class |
+
+Training uses class-weighted cross-entropy loss to account for the class imbalance, and stops early if validation loss does not improve for 10 consecutive epochs.
+
+### 6. Train XGBoost
+
+Trains an XGBoost gradient boosted tree classifier on the split data and evaluates it on the test set:
+
+```bash
+python xgboost_train.py
+```
+
+Unlike the deep learning models, XGBoost operates directly on the flat 187-sample feature vector with no GPU required. Outputs are saved to `build/xgboost/`:
+
+| File | Description |
+|---|---|
+| `model.json` | Saved XGBoost model (native format) |
+| `metrics.json` | Classification report, hyperparameters, and best boosting round |
+| `training_curves.png` | Log-loss per boosting round for train and validation |
+| `confusion_matrix.png` | Normalised confusion matrix on the test set |
+| `roc_curves.png` | One-vs-rest ROC curves with AUC per class |
+| `feature_importance.png` | Top-30 time-step positions by gain — shows which part of the ECG beat is most discriminative |
+
+Training uses class-balanced sample weights to account for class imbalance, and stops early if validation log-loss does not improve for 20 consecutive boosting rounds.

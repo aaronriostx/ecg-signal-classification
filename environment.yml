@@ -13,6 +13,7 @@ dependencies:
   # ML
   - scikit-learn
   - imbalanced-learn
+  - xgboost
   # Deep learning
   - pytorch
   - torchvision

@@ -41,7 +41,8 @@ ecg-signal-classification/
 ├── split_data.py
 ├── cnn_1d_train.py
 ├── resnet_1d_train.py
-└── xgboost_train.py
+├── xgboost_train.py
+└── summary.py
 ```
 
 ## Setup
@@ -162,3 +163,25 @@ Unlike the deep learning models, XGBoost operates directly on the flat 187-sampl
 | `feature_importance.png` | Top-30 time-step positions by gain — shows which part of the ECG beat is most discriminative |
 
 Training uses class-balanced sample weights to account for class imbalance, and stops early if validation log-loss does not improve for 20 consecutive boosting rounds.
+
+### 7. Compare Models
+
+Prints a side-by-side comparison of all trained models to the console:
+
+```bash
+python summary.py
+```
+
+Displays the following metrics for each model, with the best value highlighted green and worst red per row:
+
+| Metric | Description |
+|---|---|
+| Accuracy | Overall fraction of correct predictions on the test set |
+| Macro F1 | Unweighted mean F1 across all three classes |
+| Macro Precision | Unweighted mean precision across all three classes |
+| Macro Recall | Unweighted mean recall across all three classes |
+| Weighted F1 | F1 weighted by class support |
+| Training Time | Wall-clock time for the training loop |
+| Epochs / Rounds | Epochs trained (CNN, ResNet) or boosting rounds (XGBoost) |
+
+Per-class precision, recall, F1, and support are also shown for Normal, Abnormal, and Noisy/Unknown.

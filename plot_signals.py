@@ -45,20 +45,20 @@ def main():
         ax.set_facecolor("none")
         ax.set_xlim(0, signals.shape[1] - 1)
         ax.set_ylim(lo, hi)
-        ax.set_ylabel("Amplitude", color="#aaaacc", fontsize=10)
-        ax.tick_params(colors="#aaaacc")
+        ax.set_ylabel("Amplitude", color="#aaaacc", fontsize=14)
+        ax.tick_params(colors="#aaaacc", labelsize=14)
         for spine in ax.spines.values():
             spine.set_edgecolor("#333355")
 
         ax.text(
             0.01, 0.93, f"{label}  ({mask.sum():,})",
             transform=ax.transAxes,
-            color=color, fontsize=11, fontweight="bold", va="top",
+            color=color, fontsize=15, fontweight="bold", va="top",
         )
 
         print(f"  {label:<15} {mask.sum():>7,} signals")
 
-    axes[-1].set_xlabel("Sample", color="#aaaacc", fontsize=11)
+    axes[-1].set_xlabel("Sample", color="#aaaacc", fontsize=15)
     fig.tight_layout()
 
     fig.savefig(OUT_FILE, dpi=150, bbox_inches="tight", transparent=True)

@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import seaborn as sns
 from tqdm import tqdm
+from torchinfo import summary
 
 # ---------------------------------------------------------------------------
 # Config
@@ -247,7 +248,7 @@ def main():
     optimizer = torch.optim.Adam(model.parameters(), lr=LR)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=4, factor=0.5)
 
-    print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}\n")
+    summary(model, input_size=(1, 1, 187), device=str(device))
 
     # Training loop with early stopping
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}

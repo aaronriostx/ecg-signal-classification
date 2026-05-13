@@ -17,7 +17,7 @@ Each script depends on the outputs of the previous one. All scripts must be run 
 
 ```bash
 python preprocess.py        # raw-data/ → build/ecg_unified.h5
-python plot_signals.py      # build/ecg_unified.h5 → build/ecg_signals.png
+python plot_signals.py      # build/ecg_unified.h5 → build/ecg_signals.png (transparent background, no title)
 python split_data.py        # build/ecg_unified.h5 → build/{train,val,test}.h5
 python cnn_1d_train.py      # build/{train,val,test}.h5 → build/cnn_1d/
 python resnet_1d_train.py   # build/{train,val,test}.h5 → build/resnet_1d/

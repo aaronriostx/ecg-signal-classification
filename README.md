@@ -81,7 +81,7 @@ Label mapping:
 
 ### 2. Visualize
 
-Plots all 132,526 ECG signals in a 3-panel figure colored by classification, saved to `build/ecg_signals.png`:
+Plots all 132,526 ECG signals in a 3-panel figure colored by classification, saved to `build/ecg_signals.png`. The output has a transparent background so it can be dropped directly into slides or documents:
 
 ```bash
 python plot_signals.py

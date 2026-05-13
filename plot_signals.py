@@ -29,7 +29,7 @@ def main():
     x = np.arange(signals.shape[1])
 
     fig, axes = plt.subplots(3, 1, figsize=(16, 12), sharex=True)
-    fig.patch.set_facecolor("#0f0f1a")
+    fig.patch.set_alpha(0.0)
 
     for ax, (cls, (label, color, alpha)) in zip(axes, CLASSES.items()):
         mask = labels == cls
@@ -42,7 +42,7 @@ def main():
         lc = LineCollection(segs, color=color, alpha=alpha, linewidth=0.4, rasterized=True)
         ax.add_collection(lc)
 
-        ax.set_facecolor("#0f0f1a")
+        ax.set_facecolor("none")
         ax.set_xlim(0, signals.shape[1] - 1)
         ax.set_ylim(lo, hi)
         ax.set_ylabel("Amplitude", color="#aaaacc", fontsize=10)
@@ -59,10 +59,9 @@ def main():
         print(f"  {label:<15} {mask.sum():>7,} signals")
 
     axes[-1].set_xlabel("Sample", color="#aaaacc", fontsize=11)
-    fig.suptitle("All ECG Signals by Classification", color="white", fontsize=14, fontweight="bold", y=0.995)
     fig.tight_layout()
 
-    fig.savefig(OUT_FILE, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
+    fig.savefig(OUT_FILE, dpi=150, bbox_inches="tight", transparent=True)
     plt.close(fig)
     print(f"\nSaved → {OUT_FILE}")
 

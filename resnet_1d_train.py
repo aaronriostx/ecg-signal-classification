@@ -172,10 +172,10 @@ ACCENT   = ["#2ecc71", "#e74c3c", "#f39c12"]
 
 def plot_training_curves(history, out_path):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
-    fig.patch.set_facecolor(DARK_FIG)
+    fig.patch.set_facecolor("none")
 
     for ax in (ax1, ax2):
-        ax.set_facecolor(DARK_BG)
+        ax.set_facecolor("none")
         ax.tick_params(colors=TEXT_COL)
         for sp in ax.spines.values():
             sp.set_edgecolor("#333355")
@@ -198,15 +198,15 @@ def plot_training_curves(history, out_path):
 
     fig.suptitle("Training Curves — 1D ResNet", color="white", fontsize=14, fontweight="bold")
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
+    fig.savefig(out_path, dpi=150, bbox_inches="tight", transparent=True)
     plt.close(fig)
 
 
 def plot_confusion_matrix(labels, preds, out_path):
     cm = confusion_matrix(labels, preds, normalize="true")
     fig, ax = plt.subplots(figsize=(7, 6))
-    fig.patch.set_facecolor(DARK_FIG)
-    ax.set_facecolor(DARK_BG)
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
 
     sns.heatmap(
         cm, annot=True, fmt=".2f", cmap="YlOrRd",
@@ -220,15 +220,15 @@ def plot_confusion_matrix(labels, preds, out_path):
     ax.set_title("Confusion Matrix (normalised) — 1D ResNet", color="white", fontsize=13, fontweight="bold", pad=12)
 
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
+    fig.savefig(out_path, dpi=150, bbox_inches="tight", transparent=True)
     plt.close(fig)
 
 
 def plot_roc_curves(labels, probs, out_path):
     labels_bin = label_binarize(labels, classes=[0, 1, 2])
     fig, ax = plt.subplots(figsize=(8, 6))
-    fig.patch.set_facecolor(DARK_FIG)
-    ax.set_facecolor(DARK_BG)
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
 
     for i, (cls, color) in enumerate(zip(CLASSES, ACCENT)):
         fpr, tpr, _ = roc_curve(labels_bin[:, i], probs[:, i])
@@ -245,7 +245,7 @@ def plot_roc_curves(labels, probs, out_path):
     ax.set_title("ROC Curves (one-vs-rest) — 1D ResNet", color="white", fontsize=13, fontweight="bold", pad=12)
 
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
+    fig.savefig(out_path, dpi=150, bbox_inches="tight", transparent=True)
     plt.close(fig)
 
 

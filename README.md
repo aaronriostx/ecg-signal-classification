@@ -19,12 +19,14 @@ ecg-signal-classification/
 │   ├── cnn_1d/
 │   │   ├── model.pt             # Saved model weights
 │   │   ├── metrics.json         # Classification report & hyperparameters
+│   │   ├── architecture.png     # Layer diagram (visualize_cnn.py)
 │   │   ├── training_curves.png  # Loss & accuracy over epochs
 │   │   ├── confusion_matrix.png # Normalised confusion matrix
 │   │   └── roc_curves.png       # One-vs-rest ROC curves
 │   ├── resnet_1d/
 │   │   ├── model.pt             # Saved model weights
 │   │   ├── metrics.json         # Classification report & hyperparameters
+│   │   ├── architecture.png     # Layer diagram + residual block detail (visualize_resnet.py)
 │   │   ├── training_curves.png  # Loss & accuracy over epochs
 │   │   ├── confusion_matrix.png # Normalised confusion matrix
 │   │   └── roc_curves.png       # One-vs-rest ROC curves
@@ -42,6 +44,8 @@ ecg-signal-classification/
 ├── cnn_1d_train.py
 ├── resnet_1d_train.py
 ├── xgboost_train.py
+├── visualize_cnn.py
+├── visualize_resnet.py
 └── summary.py
 ```
 
@@ -164,7 +168,23 @@ Unlike the deep learning models, XGBoost operates directly on the flat 187-sampl
 
 Training uses class-balanced sample weights to account for class imbalance, and stops early if validation log-loss does not improve for 20 consecutive boosting rounds.
 
-### 7. Compare Models
+### 7. Visualize Architectures
+
+Generates architecture diagrams for the two deep learning models:
+
+```bash
+python visualize_cnn.py     # build/cnn_1d/architecture.png
+python visualize_resnet.py  # build/resnet_1d/architecture.png
+```
+
+| File | Description |
+|---|---|
+| `build/cnn_1d/architecture.png` | Horizontal pipeline showing all 4 conv blocks, classifier head, and output shapes |
+| `build/resnet_1d/architecture.png` | Pipeline overview + side-by-side detail of both `ResidualBlock` variants (identity vs. projection shortcut) |
+
+All output PNGs use transparent backgrounds.
+
+### 9. Compare Models
 
 Prints a side-by-side comparison of all trained models to the console:
 

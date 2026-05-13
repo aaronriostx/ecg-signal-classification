@@ -17,7 +17,7 @@ Each script depends on the outputs of the previous one. All scripts must be run 
 
 ```bash
 python preprocess.py        # raw-data/ → build/ecg_unified.h5
-python plot_signals.py      # build/ecg_unified.h5 → build/ecg_signals.png (transparent background, no title)
+python plot_signals.py      # build/ecg_unified.h5 → build/ecg_signals.png
 python split_data.py        # build/ecg_unified.h5 → build/{train,val,test}.h5
 python cnn_1d_train.py      # build/{train,val,test}.h5 → build/cnn_1d/
 python resnet_1d_train.py   # build/{train,val,test}.h5 → build/resnet_1d/
@@ -27,6 +27,25 @@ python make_presentation.py # all build/ outputs → build/ecg_classification_su
 ```
 
 Training scripts (steps 4–6) are independent of each other and can be run in any order or re-run individually without re-running earlier steps.
+
+## Visualization utilities
+
+Standalone scripts that generate architecture diagrams. Run after the corresponding training script so the output directory exists.
+
+```bash
+python visualize_cnn.py     # → build/cnn_1d/architecture.png
+python visualize_resnet.py  # → build/resnet_1d/architecture.png
+```
+
+`visualize_resnet.py` renders a two-panel figure: the full pipeline on top and a side-by-side breakdown of both `ResidualBlock` variants (identity vs. projection shortcut) below.
+
+## Figure conventions
+
+All exported PNGs use transparent backgrounds. In plot functions use:
+- `fig.patch.set_facecolor("none")` and `ax.set_facecolor("none")`
+- `fig.savefig(..., transparent=True)` — never pass `facecolor=fig.get_facecolor()`
+
+Legend backgrounds (`facecolor=DARK_BG`) are intentionally kept dark so text stays readable on any slide background.
 
 ## Label scheme
 

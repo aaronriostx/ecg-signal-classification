@@ -71,8 +71,8 @@ def plot_training_curves(evals_result, out_path):
     rounds     = range(1, len(train_loss) + 1)
 
     fig, ax = plt.subplots(figsize=(10, 5))
-    fig.patch.set_facecolor(DARK_FIG)
-    ax.set_facecolor(DARK_BG)
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
     ax.tick_params(colors=TEXT_COL)
     for sp in ax.spines.values():
         sp.set_edgecolor("#333355")
@@ -85,15 +85,15 @@ def plot_training_curves(evals_result, out_path):
     ax.set_title("Training Curves — XGBoost", color="white", fontsize=14, fontweight="bold", pad=12)
 
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
+    fig.savefig(out_path, dpi=150, bbox_inches="tight", transparent=True)
     plt.close(fig)
 
 
 def plot_confusion_matrix(labels, preds, out_path):
     cm = confusion_matrix(labels, preds, normalize="true")
     fig, ax = plt.subplots(figsize=(7, 6))
-    fig.patch.set_facecolor(DARK_FIG)
-    ax.set_facecolor(DARK_BG)
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
 
     sns.heatmap(
         cm, annot=True, fmt=".2f", cmap="YlOrRd",
@@ -107,15 +107,15 @@ def plot_confusion_matrix(labels, preds, out_path):
     ax.set_title("Confusion Matrix (normalised) — XGBoost", color="white", fontsize=13, fontweight="bold", pad=12)
 
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
+    fig.savefig(out_path, dpi=150, bbox_inches="tight", transparent=True)
     plt.close(fig)
 
 
 def plot_roc_curves(labels, probs, out_path):
     labels_bin = label_binarize(labels, classes=[0, 1, 2])
     fig, ax = plt.subplots(figsize=(8, 6))
-    fig.patch.set_facecolor(DARK_FIG)
-    ax.set_facecolor(DARK_BG)
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
 
     for i, (cls, color) in enumerate(zip(CLASSES, ACCENT)):
         fpr, tpr, _ = roc_curve(labels_bin[:, i], probs[:, i])
@@ -132,7 +132,7 @@ def plot_roc_curves(labels, probs, out_path):
     ax.set_title("ROC Curves (one-vs-rest) — XGBoost", color="white", fontsize=13, fontweight="bold", pad=12)
 
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
+    fig.savefig(out_path, dpi=150, bbox_inches="tight", transparent=True)
     plt.close(fig)
 
 
@@ -148,8 +148,8 @@ def plot_feature_importance(model, out_path, top_n=30):
     indices = [int(f[1:]) for f in features]
 
     fig, ax = plt.subplots(figsize=(10, 8))
-    fig.patch.set_facecolor(DARK_FIG)
-    ax.set_facecolor(DARK_BG)
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
     ax.tick_params(colors=TEXT_COL)
     for sp in ax.spines.values():
         sp.set_edgecolor("#333355")
@@ -163,7 +163,7 @@ def plot_feature_importance(model, out_path, top_n=30):
                  color="white", fontsize=13, fontweight="bold", pad=12)
 
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
+    fig.savefig(out_path, dpi=150, bbox_inches="tight", transparent=True)
     plt.close(fig)
 
 

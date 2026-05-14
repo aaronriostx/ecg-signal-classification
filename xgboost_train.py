@@ -33,12 +33,12 @@ CLASSES = ["Normal", "Abnormal", "Noisy/Unknown"]
 PARAMS = {
     "objective":        "multi:softprob",
     "num_class":        3,
-    "eval_metric":      "mlogloss",
-    "learning_rate":    0.1,
+    "eval_metric":      ["mlogloss", "merror"],
+    "learning_rate":    0.01,
     "max_depth":        6,
     "subsample":        0.8,
     "colsample_bytree": 0.8,
-    "n_estimators":     500,
+    "n_estimators":     1000,
     "early_stopping_rounds": 20,
     "seed":             42,
     "n_jobs":           -1,
@@ -68,22 +68,34 @@ ACCENT   = ["#2ecc71", "#e74c3c", "#f39c12"]
 def plot_training_curves(evals_result, out_path):
     train_loss = evals_result["validation_0"]["mlogloss"]
     val_loss   = evals_result["validation_1"]["mlogloss"]
+    train_acc  = [1 - e for e in evals_result["validation_0"]["merror"]]
+    val_acc    = [1 - e for e in evals_result["validation_1"]["merror"]]
     rounds     = range(1, len(train_loss) + 1)
 
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
     fig.patch.set_facecolor("none")
-    ax.set_facecolor("none")
-    ax.tick_params(colors=TEXT_COL)
-    for sp in ax.spines.values():
-        sp.set_edgecolor("#333355")
 
-    ax.plot(rounds, train_loss, color="#5dade2", label="Train")
-    ax.plot(rounds, val_loss,   color="#f39c12", label="Val", linestyle="--")
-    ax.set_xlabel("Boosting Round", color=TEXT_COL, fontsize=11)
-    ax.set_ylabel("Log Loss",       color=TEXT_COL, fontsize=11)
-    ax.legend(facecolor=DARK_BG, labelcolor="white")
-    ax.set_title("Training Curves — XGBoost", color="white", fontsize=14, fontweight="bold", pad=12)
+    for ax in (ax1, ax2):
+        ax.set_facecolor("none")
+        ax.tick_params(colors=TEXT_COL)
+        for sp in ax.spines.values():
+            sp.set_edgecolor("#333355")
 
+    ax1.plot(rounds, train_loss, color="#5dade2", label="Train")
+    ax1.plot(rounds, val_loss,   color="#f39c12", label="Val", linestyle="--")
+    ax1.set_xlabel("Boosting Round", color=TEXT_COL, fontsize=11)
+    ax1.set_ylabel("Log Loss",       color=TEXT_COL, fontsize=11)
+    ax1.legend(facecolor=DARK_BG, labelcolor="white")
+    ax1.set_title("Loss", color="white", fontsize=12)
+
+    ax2.plot(rounds, train_acc, color="#5dade2", label="Train")
+    ax2.plot(rounds, val_acc,   color="#f39c12", label="Val", linestyle="--")
+    ax2.set_xlabel("Boosting Round", color=TEXT_COL, fontsize=11)
+    ax2.set_ylabel("Accuracy",       color=TEXT_COL, fontsize=11)
+    ax2.legend(facecolor=DARK_BG, labelcolor="white")
+    ax2.set_title("Accuracy", color="white", fontsize=12)
+
+    fig.suptitle("Training Curves — XGBoost", color="white", fontsize=14, fontweight="bold")
     fig.tight_layout()
     fig.savefig(out_path, dpi=150, bbox_inches="tight", transparent=True)
     plt.close(fig)

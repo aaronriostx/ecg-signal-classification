@@ -275,7 +275,7 @@ def main():
     criterion = nn.CrossEntropyLoss(weight=torch.tensor(weights, dtype=torch.float32).to(device))
 
     model     = ResNet1D(n_classes=len(CLASSES)).to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=LR)
+    optimizer = torch.optim.Adam(model.parameters(), lr=LR,  weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=4, factor=0.5)
 
     print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}\n")

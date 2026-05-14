@@ -35,7 +35,7 @@ OUT_DIR = os.path.join(BUILD, "cnn_1d")
 CLASSES = ["Normal", "Abnormal", "Noisy/Unknown"]
 
 BATCH_SIZE = 256
-LR         = 1e-3
+LR         = 1e-4
 EPOCHS     = 50
 PATIENCE   = 10
 SEED       = 42
